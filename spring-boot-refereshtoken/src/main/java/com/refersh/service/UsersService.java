@@ -14,4 +14,5 @@ public interface UsersService {
 	public Users putData(Users users, int id) throws Exception;
 
 	public void deleteById(int id);
+
 }

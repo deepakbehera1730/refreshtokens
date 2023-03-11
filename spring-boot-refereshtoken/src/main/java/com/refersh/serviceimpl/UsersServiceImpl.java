@@ -45,7 +45,7 @@ public class UsersServiceImpl implements UsersService {
 
 	@Override
 	public Users findById(int id) throws Exception {
-		Users users = repo.findById(id).orElseThrow(()->new Exception("Users not found"));
+		Users users = repo.findById(id).orElseThrow(() -> new Exception("Users not found"));
 		return users;
 
 	}
@@ -53,7 +53,7 @@ public class UsersServiceImpl implements UsersService {
 	@Override
 
 	public Users putData(Users users, int id) throws Exception {
-		Users user1 = repo.findById(id).orElseThrow(()->new Exception("User not Found"));
+		Users user1 = repo.findById(id).orElseThrow(() -> new Exception("User not Found"));
 		user1.setUsername(users.getUsername());
 		String sc = users.getPassword();
 		String passwordencoder = passwordEncoder.encode(sc);
@@ -79,4 +79,5 @@ public class UsersServiceImpl implements UsersService {
 		}
 
 	}
+
 }

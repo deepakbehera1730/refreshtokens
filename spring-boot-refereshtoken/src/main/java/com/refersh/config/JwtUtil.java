@@ -27,6 +27,7 @@ public class JwtUtil implements Serializable {
 		return extractClaim(token, Claims::getSubject);
 	}
 
+
 	public Date extractExpiration(String token) {
 		return extractClaim(token, Claims::getExpiration);
 	}
@@ -54,6 +55,8 @@ public class JwtUtil implements Serializable {
 		return createToken(claims, userDetails.getUsername());
 	}
 
+
+
 	public Claims getAllClaimsFromToken(String token) {
 		return Jwts.parser().setSigningKey(secret).parseClaimsJws(token).getBody();
 	}
@@ -63,17 +66,17 @@ public class JwtUtil implements Serializable {
 		return Jwts.builder().setClaims(claims).claim("type", "access").setSubject(subject)
 				.setIssuedAt(new Date(System.currentTimeMillis()))
 				.setExpiration(new Date(System.currentTimeMillis() + JWT_TOKEN_VALIDITY * 1000))
-				.signWith(SignatureAlgorithm.HS256, secret).compact();
+				.signWith(SignatureAlgorithm.HS512, secret).compact();
 	}
 
 	public String refreshToken(String accessToken, UserDetails userDetails) {
 		final Date createdDate = new Date();
 		final Date expirationDate = calculateExpirationDate(createdDate);
-
+       
 		final Claims claims = getAllClaimsFromToken(accessToken);
 		claims.setIssuedAt(createdDate);
 		claims.setExpiration(expirationDate);
-		return Jwts.builder().setClaims(claims).claim("type", "refresh").setSubject(userDetails.getUsername())
+		return Jwts.builder().setClaims(claims).claim("type", "refresh").setSubject(userDetails.getUsername()).setAudience(userDetails.getPassword())
 				.signWith(SignatureAlgorithm.HS512, secret).compact();
 	}
 
